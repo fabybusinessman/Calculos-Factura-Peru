@@ -1,0 +1,70 @@
+style
+    body {
+      margin 0;
+      padding 0;
+      background-color #f5f9f8;  color de fondo 
+      min-height 100vh;
+      display flex;
+      justify-content center;  centra horizontalmente 
+      align-items start;  empieza arriba, no al centro vertical 
+      padding-top 50px;  espacio superior 
+    }
+
+    .container {
+      width 100%;
+      max-width 800px;  máximo ancho 
+      background-color white;
+      border-radius 10px;
+      box-shadow 0 0 20px rgba(0,0,0,0.1);
+      padding 30px;
+    }
+  style
+
+
+
+head
+body
+
+    div class=container
+        h1 class=text-2xl font-bold mb-6 text-center text-gray-800Calculadora de Facturación Peruanah1
+
+        div class=input-row-container
+             label for=exchangeRateTipo de cambio (PEN)label
+             div class=input-group
+                input type=number id=exchangeRate placeholder=Ingrese tipo de cambio step=0.001
+                button id=editExchangeRateButton class=edit-button onclick=editExchangeRate() style=display none;Editarbutton
+             div
+        div
+
+        div class=input-row-container
+            label for=salesValueUSDValor de la Venta (USD)label
+            div class=input-group
+                input type=number id=salesValueUSD placeholder=Ingrese monto
+                button onclick=calculateInvoice()Calcularbutton
+            div
+        div
+
+        div class=result-line
+            labelIGV 18% (USD)label
+            span id=igvValue--span
+        div
+
+        div class=result-line
+            labelImporte Total (USD)label
+            span id=totalAmountUSD--span
+        div
+
+        div class=result-line
+            labelPorcentaje de Tracción 12% (PEN - Aproximado al Entero)label
+            span id=tractionValuePEN--span
+        div
+
+        div class=result-line
+            labelCrédito del Monto Neto Pendiente de Pago (USD)label
+            span id=creditValueUSD--span
+        div
+
+         div class=note
+            Nota El porcentaje de tracción se calcula sobre el Importe Total (PEN) y se redondea al entero más cercano. El crédito es el 88% del Importe Total (USD) mostrado en USD.
+        div
+    div

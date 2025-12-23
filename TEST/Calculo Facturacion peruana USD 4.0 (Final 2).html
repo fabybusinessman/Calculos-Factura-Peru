@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Facturación Peruana</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-[#f4f7f6] flex items-center justify-center min-h-screen p-4">
+
+  <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-xl">
+    <h1 class="text-2xl font-bold mb-6 text-center text-gray-800">Calculadora de Facturación Peruana</h1>
+
+    <!-- Tipo de Cambio -->
+    <div class="mb-4 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+      <label for="exchangeRate" class="font-semibold text-gray-700">Tipo de cambio (PEN):</label>
+      <div class="flex gap-2">
+        <input type="number" id="exchangeRate" placeholder="Ingrese tipo de cambio" step="0.001"
+          class="border border-black px-4 py-2 rounded-full w-full md:w-[230px] outline-none disabled:opacity-70">
+        <button id="editExchangeRateButton" onclick="editExchangeRate()"
+          class="hidden bg-slate-500 hover:bg-slate-600 text-white px-4 py-2 rounded-full border border-black">Editar</button>
+      </div>
+    </div>
+
+    <!-- Valor de la venta -->
+    <div class="mb-4 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+      <label for="salesValueUSD" class="font-semibold text-gray-700">Valor de la Venta (USD):</label>
+      <div class="flex gap-2">
+        <input type="number" id="salesValueUSD" placeholder="Ingrese monto"
+          class="border border-black px-4 py-2 rounded-full w-full md:w-[230px] outline-none">
+        <button onclick="calculateInvoice()"
+          class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-full border border-black">Calcular</button>
+      </div>
+    </div>
+
+    <!-- Resultados -->
+    <div class="space-y-3">
+      <div class="flex justify-between items-center border border-black rounded-md px-4 py-2 bg-white">
+        <label class="font-semibold text-gray-700">IGV 18% (USD):</label>
+        <span id="igvValue" class="text-slate-800">--</span>
+      </div>
+
+      <div class="flex justify-between items-center border border-black rounded-md px-4 py-2 bg-white">
+        <label class="font-semibold text-gray-700">Importe Total (USD):</label>
+        <span id="totalAmountUSD" class="text-slate-800">--</span>
+      </div>
+
+      <div class="flex justify-between items-center border border-black rounded-md px-4 py-2 bg-white">
+        <label class="font-semibold text-gray-700">Porcentaje de Tracción 12% (PEN - Aproximado):</label>
+        <span id="tractionValuePEN" class="text-slate-800">--</span>
+      </div>
+
+      <div class="flex justify-between items-center border border-black rounded-md px-4 py-2 bg-white">
+        <label class="font-semibold text-gray-700">Crédito Neto Pendiente (USD):</label>
+        <span id="creditValueUSD" class="text-slate-800">--</span>
+      </div>
+    </div>
+
+    <p class="text-sm text-slate-500 text-center mt-6">
+      *Nota: El porcentaje de tracción se calcula sobre el Importe Total (PEN) y se redondea al entero más cercano. El crédito es el 88% del Importe Total (USD).
+    </p>
+  </div>
+
+  <script>
+    function calculateInvoice() {
+      const exchangeRateInput = document.getElementById('exchangeRate');
+      const salesValueUSDInput = document.getElementById('salesValueUSD');
+
+      const exchangeRate = parseFloat(exchangeRateInput.value);
+      const salesValueUSD = parseFloat(salesValueUSDInput.value);
+
+      if (isNaN(exchangeRate) || exchangeRate <= 0) {
+        alert('Por favor, ingrese un tipo de cambio válido.');
+        limpiarCampos();
+        return;
+      }
+
+      if (isNaN(salesValueUSD) || salesValueUSD < 0) {
+        alert('Por favor, ingrese un monto válido.');
+        limpiarCampos();
+        return;
+      }
+
+      const igv = salesValueUSD * 0.18;
+      const total = salesValueUSD + igv;
+      const totalPEN = total * exchangeRate;
+      const traccion = Math.round(totalPEN * 0.12);
+      const credito = total * 0.88;
+
+      document.getElementById('igvValue').innerText = igv.toFixed(2) + ' USD';
+      document.getElementById('totalAmountUSD').innerText = total.toFixed(2) + ' USD';
+      document.getElementById('tractionValuePEN').innerText = traccion + ' PEN';
+      document.getElementById('creditValueUSD').innerText = credito.toFixed(2) + ' USD';
+
+      exchangeRateInput.disabled = true;
+      document.getElementById('editExchangeRateButton').classList.remove('hidden');
+    }
+
+    function editExchangeRate() {
+      const input = document.getElementById('exchangeRate');
+      input.disabled = false;
+      input.focus();
+      document.getElementById('editExchangeRateButton').classList.add('hidden');
+    }
+
+    function limpiarCampos() {
+      document.getElementById('igvValue').innerText = '--';
+      document.getElementById('totalAmountUSD').innerText = '--';
+      document.getElementById('tractionValuePEN').innerText = '--';
+      document.getElementById('creditValueUSD').innerText = '--';
+    }
+
+    window.onload = () => {
+      document.getElementById('editExchangeRateButton').classList.add('hidden');
+    };
+  </script>
+
+</body>
+</html>
